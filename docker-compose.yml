@@ -1,0 +1,39 @@
+services:
+  mysql:
+    image: mysql:8.0.34
+    restart: always
+    ports:
+      - '3307:3306'  # Измените хост-порт, если 3306 занят
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_DATABASE: app
+      MYSQL_USER: app
+      MYSQL_PASSWORD: pass
+    volumes:
+      - mysql_data:/var/lib/mysql  # Добавьте volume для сохранения данных
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: pass
+    ports:
+      - '5433:5432'  # Измените хост-порт, если 5432 занят
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  node-app:
+    build: ./gate-simulator
+    ports:
+      - '9999:9999'
+    depends_on:
+      - mysql
+      - postgres
+    environment:
+      NODE_ENV: production
+
+volumes:
+  mysql_data:
+  postgres_data:
