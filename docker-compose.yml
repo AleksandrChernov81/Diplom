@@ -3,36 +3,55 @@ services:
     image: mysql:8.0.34
     restart: always
     ports:
-      - '3307:3306'  # Измените хост-порт, если 3306 занят
+      - '3307:3306'
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: pass
     volumes:
-      - mysql_data:/var/lib/mysql  # Добавьте volume для сохранения данных
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uapp", "-ppass"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   postgres:
-    image: postgres:latest
+    image: postgres:17
     restart: always
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: pass
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
     ports:
-      - '5433:5432'  # Измените хост-порт, если 5432 занят
+      - '5433:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
 
   node-app:
     build: ./gate-simulator
     ports:
       - '9999:9999'
     depends_on:
-      - mysql
-      - postgres
+      mysql:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       NODE_ENV: production
+      DB_URL: "jdbc:postgresql://postgres:5432/app"
+      DB_USER: "app"
+      DB_PASSWORD: "pass"
 
 volumes:
   mysql_data:
