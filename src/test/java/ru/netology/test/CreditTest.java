@@ -9,7 +9,6 @@ import ru.netology.data.SQLHelper;
 import ru.netology.page.MainPage;
 
 import static com.codeborne.selenide.Selenide.*;
-import static ru.netology.data.SQLHelper.cleanDatabase;
 
 public class CreditTest {
 
@@ -31,7 +30,7 @@ public class CreditTest {
 
     @AfterEach
     public void teardrop() {
-        cleanDatabase();
+        SQLHelper.clean();
     }
 
     @Test
@@ -41,7 +40,7 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkSuccessNotification();
-        SQLHelper.expectedCreditStatus("APPROVED");
+        SQLHelper.verifyCreditStatus("APPROVED");
     }
 
     @Test
@@ -51,7 +50,7 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkErrorNotification();
-        SQLHelper.expectedCreditStatus("DECLINED");
+        SQLHelper.verifyCreditStatus("DECLINED");
     }
 
     @Test
@@ -61,7 +60,7 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkSuccessNotification();
-        SQLHelper.expectedCreditStatus("APPROVED");
+        SQLHelper.verifyCreditStatus("APPROVED");
     }
 
     @Test
@@ -71,7 +70,7 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkSuccessNotification();
-        SQLHelper.expectedCreditStatus("APPROVED");
+        SQLHelper.verifyCreditStatus("APPROVED");
     }
 
     @Test
@@ -81,7 +80,7 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkSuccessNotification();
-        SQLHelper.expectedCreditStatus("APPROVED");
+        SQLHelper.verifyCreditStatus("APPROVED");
     }
 
     @Test
@@ -91,16 +90,16 @@ public class CreditTest {
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
         formPage.checkSuccessNotification();
-        SQLHelper.expectedCreditStatus("APPROVED");
+        SQLHelper.verifyCreditStatus("APPROVED");
     }
 
-        @Test
-        void shouldGetErrorNotifyIfEmptyNumber() {
+    @Test
+    void shouldGetErrorNotifyIfEmptyNumber() {
         var mainPage = new MainPage();
         var cardInfo = DataHelper.getCardInfoCardNumberEmpty();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfEmptyNumber();
+        formPage.checkErrorNotify(formPage.numberField, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -109,7 +108,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWith15Digits();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidNumber();
+        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
     }
 
     @Test
@@ -118,7 +117,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWith17Digits();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidNumber();
+        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
     }
 
     @Test
@@ -136,9 +135,8 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithLettersInNumber();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidNumber();
+        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
     }
-
 
     @Test
     void shouldGetErrorNotifyIfEmptyMonth() {
@@ -146,7 +144,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getCardInfoCardMonthEmpty();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfEmptyMonth();
+        formPage.checkErrorNotify(formPage.monthField, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -155,7 +153,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWith00Month();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidMonth();
+        formPage.checkErrorNotify(formPage.monthField, "Неверно указан срок действия карты");
     }
 
     @Test
@@ -164,7 +162,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWith13thMonth();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidMonth();
+        formPage.checkErrorNotify(formPage.monthField, "Неверно указан срок действия карты");
     }
 
     @Test
@@ -173,7 +171,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithExpiredMonth();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfExpiredMonth();
+        formPage.checkErrorNotify(formPage.monthField, "Истёк срок действия карты");
     }
 
     @Test
@@ -182,7 +180,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getCardInfoCardYearEmpty();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfEmptyYear();
+        formPage.checkErrorNotify(formPage.yearField, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -191,7 +189,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getCardWithPlus6YearsFromCurrent();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidYear();
+        formPage.checkErrorNotify(formPage.yearField, "Неверно указан срок действия карты");
     }
 
     @Test
@@ -200,7 +198,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithExpiredYear();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfExpiredYear();
+        formPage.checkErrorNotify(formPage.yearField, "Истёк срок действия карты");
     }
 
     @Test
@@ -209,7 +207,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getCardInfoCardHolderEmpty();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfEmptyHolder();
+        formPage.checkErrorNotify(formPage.holderField, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -218,7 +216,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithCyrillicName();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidHolder();
+        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
     }
 
     @Test
@@ -227,7 +225,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithDigitsInName();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidHolder();
+        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
     }
 
     @Test
@@ -236,7 +234,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCardWithSpecialSymbolsInName();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidHolder();
+        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
     }
 
     @Test
@@ -245,7 +243,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getCardInfoCardCVCEmpty();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfEmptyCVC();
+        formPage.checkErrorNotify(formPage.cvcField, "Поле обязательно для заполнения");
     }
 
     @Test
@@ -254,7 +252,7 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCVCWith2Digits();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidCVC();
+        formPage.checkErrorNotify(formPage.cvcField, "Неверный формат");
     }
 
     @Test
@@ -263,6 +261,6 @@ public class CreditTest {
         var cardInfo = DataHelper.getInvalidCVCWithLetters();
         var formPage = mainPage.openCreditForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotifyIfInvalidCVC();
+        formPage.checkErrorNotify(formPage.cvcField, "Неверный формат");
     }
 }

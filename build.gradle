@@ -47,8 +47,9 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform() // Использование платформы JUnit 5
-    systemProperty 'selenide.headless', System.getProperty('selenide.headless') // Параметр headless mode для Selenide
-    systemProperty 'chromeoptions.prefs', System.getProperty('chromeoptions.prefs', "profile.password_manager_leak_detection=false") // Настройки Chrome
+    useJUnitPlatform()
+    systemProperty "selenide.headless", System.getProperty("selenide.headless", "false")
+    systemProperty "dbUrl", System.getProperty("dbUrl", "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1")
+    systemProperty "dbUsername", System.getProperty("dbUsername", "")
+    systemProperty "dbPassword", System.getProperty("dbPassword", "")
 }
-

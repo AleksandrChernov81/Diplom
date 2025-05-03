@@ -15,15 +15,15 @@ public class FormPage {
     private SelenideElement creditButton = $x("//button[.//span[contains(text(), 'Купить в кредит')]]");
 
     // Уточнённые селекторы для полей месяца и года
-    private SelenideElement monthField = $(".input-group__input-case:first-child [placeholder='08']");
-    private SelenideElement yearField = $(".input-group__input-case:nth-child(2) [placeholder='22']");
+    public SelenideElement monthField = $(".input-group__input-case:first-child [placeholder='08']");
+    public SelenideElement yearField = $(".input-group__input-case:nth-child(2) [placeholder='22']");
 
     // Остальные элементы
     private SelenideElement formHead = $("[class^='App_appContainer'] > h3.heading");
     private SelenideElement formBody = $("form");
-    private SelenideElement numberField = $("[placeholder='0000 0000 0000 0000']");
-    private SelenideElement holderField = $("input:not([placeholder])");
-    private SelenideElement cvcField = $("[placeholder='999']");
+    public SelenideElement numberField = $("[placeholder='0000 0000 0000 0000']");
+    public SelenideElement holderField = $("input:not([placeholder])");
+    public SelenideElement cvcField = $("[placeholder='999']");
     private SelenideElement continueButton = $("form button.button_view_extra"); // Уточнённый селектор
     private SelenideElement successNotification = $(".notification_status_ok");
     private SelenideElement errorNotification = $(".notification_status_error");
@@ -62,52 +62,16 @@ public class FormPage {
         errorNotification.shouldBe(visible, Duration.ofSeconds(10));
     }
 
-    // Методы проверки ошибок полей (без изменений)
+    // Обобщённый метод проверки текста ошибки для поля
+    public void checkErrorNotify(SelenideElement field, String expectedText) {
+        errorNotify(field)
+                .shouldBe(visible)
+                .shouldHave(text(expectedText));
+    }
+
     public void checkErrorNotifyIfEmptyNumber() {
-        errorNotify(numberField).shouldBe(visible, text("Поле обязательно для заполнения"));
     }
 
     public void checkErrorNotifyIfInvalidNumber() {
-        errorNotify(numberField).shouldBe(visible, text("Неверный формат"));
-    }
-
-    public void checkErrorNotifyIfEmptyMonth() {
-        errorNotify(monthField).shouldBe(visible, text("Поле обязательно для заполнения"));
-    }
-
-    public void checkErrorNotifyIfInvalidMonth() {
-        errorNotify(monthField).shouldBe(visible, text("Неверно указан срок действия карты"));
-    }
-
-    public void checkErrorNotifyIfExpiredMonth() {
-        errorNotify(monthField).shouldBe(visible, text("Истёк срок действия карты"));
-    }
-
-    public void checkErrorNotifyIfEmptyYear() {
-        errorNotify(yearField).shouldBe(visible, text("Поле обязательно для заполнения"));
-    }
-
-    public void checkErrorNotifyIfInvalidYear() {
-        errorNotify(yearField).shouldBe(visible, text("Неверно указан срок действия карты"));
-    }
-
-    public void checkErrorNotifyIfExpiredYear() {
-        errorNotify(yearField).shouldBe(visible, text("Истёк срок действия карты"));
-    }
-
-    public void checkErrorNotifyIfEmptyHolder() {
-        errorNotify(holderField).shouldBe(visible, text("Поле обязательно для заполнения"));
-    }
-
-    public void checkErrorNotifyIfInvalidHolder() {
-        errorNotify(holderField).shouldBe(visible, text("Неверный формат"));
-    }
-
-    public void checkErrorNotifyIfEmptyCVC() {
-        errorNotify(cvcField).shouldBe(visible, text("Поле обязательно для заполнения"));
-    }
-
-    public void checkErrorNotifyIfInvalidCVC() {
-        errorNotify(cvcField).shouldBe(visible, text("Неверный формат"));
     }
 }

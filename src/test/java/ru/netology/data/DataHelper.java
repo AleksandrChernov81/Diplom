@@ -1,8 +1,6 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.Value;
 
 import java.time.LocalDate;
@@ -11,13 +9,11 @@ import java.util.Locale;
 
 public class DataHelper {
 
-
     private DataHelper() {
     }
 
     private static Faker faker = new Faker(new Locale("en"));
     private static Faker fakerCyrillic = new Faker(new Locale("ru"));
-
 
     public static String approvedCard() {
         return "4444 4444 4444 4441";
@@ -46,14 +42,17 @@ public class DataHelper {
         return new CardInfo("4444 4444 4444 4441", "", generateYear(1),
                 generateValidHolder(), generateValidCVC());
     }
+
     public static CardInfo getCardInfoCardYearEmpty() {
         return new CardInfo("4444 4444 4444 4441", generateMonth(3), "",
                 generateValidHolder(), generateValidCVC());
     }
+
     public static CardInfo getCardInfoCardHolderEmpty() {
         return new CardInfo("4444 4444 4444 4441", generateMonth(3), generateYear(1),
                 "", generateValidCVC());
     }
+
     public static CardInfo getCardInfoCardCVCEmpty() {
         return new CardInfo("4444 4444 4444 4441", generateMonth(3), generateYear(1),
                 generateValidHolder(), "");
@@ -207,13 +206,11 @@ public class DataHelper {
     }
 
     @Value
-    @Setter
-   public static class CardInfo {
+    public static class CardInfo {
         String number;
         String month;
         String year;
         String holder;
         String cvc;
     }
-
 }
