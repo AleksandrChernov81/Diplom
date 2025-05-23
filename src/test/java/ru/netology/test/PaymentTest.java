@@ -99,7 +99,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardInfoCardNumberEmpty();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.numberField, "Поле обязательно для заполнения");
+        formPage.checkFieldError("number", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -108,7 +108,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWith15Digits();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
+        formPage.checkFieldError("number", "Неверный формат");
     }
 
     @Test
@@ -117,7 +117,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWith17Digits();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
+        formPage.checkFieldError("number", "Неверный формат");
     }
 
     @Test
@@ -135,7 +135,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithLettersInNumber();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.numberField, "Неверный формат");
+        formPage.checkFieldError("number", "Неверный формат");
     }
 
     @Test
@@ -144,7 +144,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardInfoCardMonthEmpty();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.monthField, "Поле обязательно для заполнения");
+        formPage.checkFieldError("month", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -153,7 +153,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWith00Month();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.monthField, "Неверно указан срок действия карты");
+        formPage.checkFieldError("month", "Неверно указан срок действия карты");
     }
 
     @Test
@@ -162,7 +162,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWith13thMonth();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.monthField, "Неверно указан срок действия карты");
+        formPage.checkFieldError("month", "Неверно указан срок действия карты");
     }
 
     @Test
@@ -171,7 +171,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithExpiredMonth();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.monthField, "Истёк срок действия карты");
+        formPage.checkFieldError("month", "Истёк срок действия карты");
     }
 
     @Test
@@ -180,7 +180,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardInfoCardYearEmpty();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.yearField, "Поле обязательно для заполнения");
+        formPage.checkFieldError("year", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -189,7 +189,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardWithPlus6YearsFromCurrent();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.yearField, "Неверно указан срок действия карты");
+        formPage.checkFieldError("year", "Неверно указан срок действия карты");
     }
 
     @Test
@@ -198,7 +198,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithExpiredYear();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.yearField, "Истёк срок действия карты");
+        formPage.checkFieldError("year", "Истёк срок действия карты");
     }
 
     @Test
@@ -207,7 +207,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardInfoCardHolderEmpty();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.holderField, "Поле обязательно для заполнения");
+        formPage.checkFieldError("holder", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -216,7 +216,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithCyrillicName();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
+        formPage.checkFieldError("holder", "Неверный формат");
     }
 
     @Test
@@ -225,7 +225,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithDigitsInName();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
+        formPage.checkFieldError("holder", "Неверный формат");
     }
 
     @Test
@@ -234,7 +234,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCardWithSpecialSymbolsInName();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.holderField, "Неверный формат");
+        formPage.checkFieldError("holder", "Неверный формат");
     }
 
     @Test
@@ -243,7 +243,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getCardInfoCardCVCEmpty();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.cvcField, "Поле обязательно для заполнения");
+        formPage.checkFieldError("cvc", "Поле обязательно для заполнения");
     }
 
     @Test
@@ -252,7 +252,7 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCVCWith2Digits();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.cvcField, "Неверный формат");
+        formPage.checkFieldError("cvc", "Неверный формат");
     }
 
     @Test
@@ -261,6 +261,6 @@ public class PaymentTest {
         var cardInfo = DataHelper.getInvalidCVCWithLetters();
         var formPage = mainPage.openPaymentForm();
         formPage.setValues(cardInfo);
-        formPage.checkErrorNotify(formPage.cvcField, "Неверный формат");
+        formPage.checkFieldError("cvc", "Неверный формат");
     }
 }
