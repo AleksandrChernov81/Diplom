@@ -1,79 +1,56 @@
 plugins {
     id 'java'
-    id 'io.qameta.allure' version '2.12.0' // Обновлённый плагин Allure
+
+    id 'io.qameta.allure' version '2.11.2' // Плагин для Allure отчетов
 }
+
+
 
 group 'ru.netology'
 version '1.0-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
-    testCompileOnly 'org.projectlombok:lombok:1.18.32'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-    // JUnit 5
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
-
-    // Allure
-    testImplementation 'io.qameta.allure:allure-junit5:2.25.0'
-    testImplementation 'io.qameta.allure:allure-selenide:2.25.0'
-
-    // Selenide
-    implementation 'com.codeborne:selenide:6.19.1' // Последняя версия
-    testImplementation 'com.codeborne:selenide:6.19.1'
-
-    // Базы данных
-    implementation 'org.postgresql:postgresql:42.7.3'
-    implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'commons-dbutils:commons-dbutils:1.8.1'
-
-    // Faker
-    implementation 'com.github.javafaker:javafaker:1.0.2'
-}
+sourceCompatibility = 11
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.compilerArgs.addAll(['-Xlint:all'])
 }
 
-allure {
-    version = '2.25.0'
-    adapter {
-        frameworks {
-            junit5 {
-                adapterVersion = '2.25.0'
-            }
-        }
-    }
-}
 
-task cleanAllureResults(type: Delete) {
-    delete fileTree("${projectDir}/allure-results") {
-        include '**/*'
+    repositories {
+        mavenCentral()
     }
+
+
+
+dependencies {
+    // Annotation Processor для lombok
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Тестовая инфраструктура и инструменты
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2' // Последняя версия JUnit Jupiter API
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2' // Исполняемый движок JUnit
+    testImplementation 'io.qameta.allure:allure-junit5:2.27.0' // Интеграция Allure с JUnit 5
+    testImplementation 'io.qameta.allure:allure-selenide:2.27.0' // Allure + Selenide для удобных отчетов
+
+    // Selenide библиотека для тестирования веб-приложений
+    implementation 'com.codeborne:selenide:6.19.1' // Самая новая версия Selenide
+    testImplementation 'com.codeborne:selenide:6.19.1'
+
+    // Работа с базами данных
+    implementation 'mysql:mysql-connector-java:8.0.33' // Драйвер для подключения к MySQL
+    implementation 'commons-dbutils:commons-dbutils:1.8.1' // Улучшенная работа с SQL-запросами
+    implementation 'org.postgresql:postgresql:42.7.3'
+    // Faker для генерации случайных данных
+    implementation 'com.github.javafaker:javafaker:1.0.2' // Текущая версия библиотеки для генерации фиктивных данных
 }
 
 test {
-    dependsOn cleanAllureResults // Очистка результатов перед тестами
     useJUnitPlatform()
-    systemProperties = [
-            'selenide.headless': System.getProperty('selenide.headless', 'false'),
-            'dbType'          : System.getProperty('dbType', 'postgres'), // postgres/mysql
-            'dbUrl'           : System.getProperty('dbUrl'),
-            'dbUsername'      : System.getProperty('dbUsername'),
-            'dbPassword'      : System.getProperty('dbPassword')
-    ]
+    systemProperty "selenide.headless", System.getProperty("selenide.headless", "false")
+    systemProperty "dbUrl", System.getProperty("dbUrl")
+    systemProperty "dbUsername", System.getProperty("dbUsername", "")
+    systemProperty "dbPassword", System.getProperty("dbPassword", "")
+   // systemProperty "dbType", System.getProperty("dbType", "postgres") // postgres/mysql
 }

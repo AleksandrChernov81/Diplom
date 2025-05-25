@@ -1,3 +1,4 @@
+// SQLHelper.java
 package ru.netology.data;
 
 import lombok.SneakyThrows;
@@ -5,31 +6,14 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SQLHelper {
     private static final QueryRunner runner = new QueryRunner();
-    private static String url;
-    private static String username;
-    private static String password;
-
-    static {
-        String dbType = System.getProperty("dbType", "postgres").toLowerCase();
-        switch (dbType) {
-            case "mysql":
-                url = System.getProperty("dbUrl", "jdbc:mysql://localhost:3307/app");
-                username = System.getProperty("dbUsername", "root");
-                password = System.getProperty("dbPassword", "");
-                break;
-            case "postgres":
-                url = System.getProperty("dbUrl", "jdbc:postgresql://localhost:5433/app");
-                username = System.getProperty("dbUsername", "app");
-                password = System.getProperty("dbPassword", "pass");
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported database type: " + dbType);
-        }
-    }
+    private static final String url = System.getProperty("dbUrl");
+    private static final String username = System.getProperty("dbUsername");
+    private static final String password = System.getProperty("dbPassword");
 
     @SneakyThrows
     private static Connection getConn() {
@@ -38,23 +22,23 @@ public class SQLHelper {
 
     @SneakyThrows
     public static String getPaymentStatus() {
-        try (Connection connection = getConn()) {
-            String query = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1";
-            return runner.query(connection, query, new ScalarHandler<>());
+        try (var connection = getConn()) {
+            var SQLQuery = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1";
+            return runner.query(connection, SQLQuery, new ScalarHandler<>());
         }
     }
 
     @SneakyThrows
     public static String getCreditStatus() {
-        try (Connection connection = getConn()) {
-            String query = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
-            return runner.query(connection, query, new ScalarHandler<>());
+        try (var connection = getConn()) {
+            var SQLQuery = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
+            return runner.query(connection, SQLQuery, new ScalarHandler<>());
         }
     }
 
     @SneakyThrows
-    public static void clean() {
-        try (Connection connection = getConn()) {
+    public static void cleanDatabase() {
+        try (var connection = getConn()) {
             runner.execute(connection, "DELETE FROM credit_request_entity");
             runner.execute(connection, "DELETE FROM payment_entity");
             runner.execute(connection, "DELETE FROM order_entity");
@@ -63,11 +47,13 @@ public class SQLHelper {
 
     public static void verifyCreditStatus(String expectedStatus) {
         String actualStatus = getCreditStatus();
-        assertEquals(expectedStatus, actualStatus, "Credit status mismatch");
+        assertNotNull(actualStatus, "Статус кредитной заявки не найден");
+        assertEquals(expectedStatus, actualStatus, "Неверный статус кредитной заявки");
     }
 
     public static void verifyPaymentStatus(String expectedStatus) {
         String actualStatus = getPaymentStatus();
-        assertEquals(expectedStatus, actualStatus, "Payment status mismatch");
+        assertNotNull(actualStatus, "Статус платежа не найден");
+        assertEquals(expectedStatus, actualStatus, "Неверный статус платежа");
     }
 }
