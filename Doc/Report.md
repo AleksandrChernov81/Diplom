@@ -13,10 +13,11 @@
 ## Количество тест-кейсов
 Всего было проведено 50 автотестов. Процент успешных тестов с PostgreSQL равен 50%.
 Из них успешных — 25, неуспешных — 25.
-![p2.jpg](../../p2.jpg)
+![p2](https://github.com/user-attachments/assets/14a699ce-5b8a-4be8-b937-0c196b628b0d)
 Процент успешных тестов с MySQL равен 52%
 Из них успешных — 26, неуспешных — 24.
-![mysql.jpg](../../mysql.jpg)
+![mysql](https://github.com/user-attachments/assets/ac86a633-912c-440b-95e6-742b2311adac)
+
 В результате прогона тестов было составлено 9 [issue](https://github.com/AleksandrChernov81/Diplom/issues).
 
 ### Общие рекомендации.
